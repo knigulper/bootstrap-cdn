@@ -75,6 +75,7 @@ app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'public, max-age=' + oneHourToSec);
     res.setHeader('Expires', new Date(Date.now() + oneHourToMilliSec).toUTCString());
     res.setHeader('Last-Modified', new Date().toUTCString());
+    res.setHeader('Strict-Transport-Security', 'max-age=16070400; includeSubDomains; preload');
     res.setHeader('Accept-Ranges', 'bytes');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
@@ -87,21 +88,41 @@ csp.extend(app, {
     policy: {
         directives: {
             'default-src': ['\'none\''],
-            'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'', 'maxcdn.bootstrapcdn.com', 'www.google-analytics.com', 'code.jquery.com',
-                           'platform.twitter.com', 'cdn.syndication.twimg.com', 'api.github.com', 'radar.cedexis.com', 's3.amazonaws.com/cdx-radar/'],
-            'style-src': ['\'self\'', '\'unsafe-inline\'', 'maxcdn.bootstrapcdn.com', 'fonts.googleapis.com', 'platform.twitter.com'],
-            'img-src': ['\'self\'', 'data:', 'www.google-analytics.com', 'bootswatch.com', 'syndication.twitter.com',
-                        'pbs.twimg.com', 'platform.twitter.com', 'analytics.twitter.com', 'stats.g.doubleclick.net'],
-            'font-src': ['\'self\'', 'maxcdn.bootstrapcdn.com', 'fonts.gstatic.com'],
+            'script-src': ['\'self\'', '\'unsafe-inline\'',
+                '\'unsafe-eval\'', 'maxcdn.bootstrapcdn.com',
+                'www.google-analytics.com', 'code.jquery.com',
+                'platform.twitter.com', 'cdn.syndication.twimg.com',
+                'api.github.com', 'radar.cedexis.com',
+                's3.amazonaws.com/cdx-radar/'
+            ],
+            'style-src': ['\'self\'', '\'unsafe-inline\'',
+                'maxcdn.bootstrapcdn.com', 'fonts.googleapis.com',
+                'platform.twitter.com'
+            ],
+            'img-src': ['\'self\'', 'data:', 'www.google-analytics.com',
+                'bootswatch.com', 'syndication.twitter.com',
+                'pbs.twimg.com', 'platform.twitter.com',
+                'analytics.twitter.com', 'stats.g.doubleclick.net'
+            ],
+            'font-src': ['\'self\'', 'maxcdn.bootstrapcdn.com',
+                'fonts.gstatic.com'
+            ],
             'manifest-src': ['\'self\''],
-            'child-src': ['\'self\'', 'platform.twitter.com', 'syndication.twitter.com', 'ghbtns.com'],
-            'connect-src': ['*.init.cedexis-radar.net radar.cedexis.com rpt.cedexis.com'],
-            'report-uri': ['https://d063bdf998559129f041de1efd2b41a5.report-uri.io/r/default/csp/enforce']
+            'child-src': ['\'self\'', 'platform.twitter.com',
+                'syndication.twitter.com', 'ghbtns.com'
+            ],
+            'connect-src': [
+                '*.init.cedexis-radar.net radar.cedexis.com rpt.cedexis.com'
+            ],
+            'report-uri': [
+                'https://d063bdf998559129f041de1efd2b41a5.report-uri.io/r/default/csp/enforce'
+            ]
         },
         useScriptNonce: false,
         useStyleNonce: false
     }
 });
+
 
 // locals
 app.locals.helpers = helpers;
