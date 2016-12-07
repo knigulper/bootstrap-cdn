@@ -13,6 +13,7 @@ var sitemap     = require('express-sitemap');
 var app = express();
 
 // middleware
+var favicon      = require('serve-favicon');
 var logger       = require('morgan');
 var serveStatic  = require('serve-static');
 var errorHandler = require('errorhandler');
@@ -56,6 +57,8 @@ if (env === 'production') {
 app.use(compression());
 app.set('etag', false);
 
+app.use(favicon(path.join(__dirname, 'public', config.favicon.uri), '7d'));
+
 app.use(serveStatic(path.join(__dirname, 'public'), {
     maxAge: '30d',
     lastModified: true,
@@ -88,31 +91,51 @@ csp.extend(app, {
     policy: {
         directives: {
             'default-src': ['\'none\''],
-            'script-src': ['\'self\'', '\'unsafe-inline\'',
-                '\'unsafe-eval\'', 'maxcdn.bootstrapcdn.com',
-                'www.google-analytics.com', 'code.jquery.com',
-                'platform.twitter.com', 'cdn.syndication.twimg.com',
-                'api.github.com', 'radar.cedexis.com',
-                's3.amazonaws.com/cdx-radar/'
+            'script-src': [
+                '\'self\'',
+                '\'unsafe-inline\'',
+                'maxcdn.bootstrapcdn.com',
+                'www.google-analytics.com',
+                'code.jquery.com',
+                'platform.twitter.com',
+                'cdn.syndication.twimg.com',
+                'api.github.com'
             ],
-            'style-src': ['\'self\'', '\'unsafe-inline\'',
-                'maxcdn.bootstrapcdn.com', 'fonts.googleapis.com',
+            'style-src': [
+                '\'self\'',
+                '\'unsafe-inline\'',
+                'maxcdn.bootstrapcdn.com',
+                'fonts.googleapis.com',
                 'platform.twitter.com'
             ],
-            'img-src': ['\'self\'', 'data:', 'www.google-analytics.com',
-                'bootswatch.com', 'syndication.twitter.com',
-                'pbs.twimg.com', 'platform.twitter.com',
-                'analytics.twitter.com', 'stats.g.doubleclick.net'
+            'img-src': [
+                '\'self\'',
+                'data:',
+                'www.google-analytics.com',
+                'bootswatch.com',
+                'syndication.twitter.com',
+                'pbs.twimg.com',
+                'platform.twitter.com',
+                'analytics.twitter.com',
+                'stats.g.doubleclick.net'
             ],
-            'font-src': ['\'self\'', 'maxcdn.bootstrapcdn.com',
+            'font-src': [
+                '\'self\'',
+                'maxcdn.bootstrapcdn.com',
                 'fonts.gstatic.com'
             ],
             'manifest-src': ['\'self\''],
-            'child-src': ['\'self\'', 'platform.twitter.com',
-                'syndication.twitter.com', 'ghbtns.com'
+            'frame-src': [
+                '\'self\'',
+                'platform.twitter.com',
+                'syndication.twitter.com',
+                'ghbtns.com'
             ],
-            'connect-src': [
-                '*.init.cedexis-radar.net radar.cedexis.com rpt.cedexis.com'
+            'child-src': [
+                '\'self\'',
+                'platform.twitter.com',
+                'syndication.twitter.com',
+                'ghbtns.com'
             ],
             'report-uri': [
                 'https://d063bdf998559129f041de1efd2b41a5.report-uri.io/r/default/csp/enforce'
